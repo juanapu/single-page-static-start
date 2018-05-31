@@ -7,7 +7,7 @@
           <div class="filter-nav">
             <span class="sortby">Sort by:</span>
             <a href="javascript:void(0)" class="default cur">Default</a>
-            <a href="javascript:void(0)" class="price">Price <svg class="icon icon-arrow-short"><use xlink:href="#icon-arrow-short"></use></svg></a>
+            <a @click="sortFunc" href="javascript:void(0)" class="price">Price <svg class="icon icon-arrow-short"><use xlink:href="#icon-arrow-short"></use></svg></a>
             <a @click="showPop" href="javascript:void(0)" class="filterby stopPop">Filter by</a>
           </div>
           <div class="accessory-result">
@@ -15,9 +15,9 @@
             <div class="filter stopPop" v-bind:class="{'filterby-show':overLayFlag}" id="filter">
               <dl class="filter-price">
                 <dt>Price:</dt>
-                <dd><a @click="checkedIndex='All'" v-bind:class="{'cur':(checkedIndex=='All')}" href="javascript:void(0)">All</a></dd>
+                <dd><a @click="filterFunc('All','All','All')" v-bind:class="{'cur':(checkedIndex=='All')}" href="javascript:void(0)">All</a></dd>
                 <dd v-for="(price,index) in filterPrice">
-                  <a @click="checkedIndex=index" v-bind:class="{'cur':checkedIndex==index}" href="javascript:void(0)">{{price.priceStart}} - {{price.priceEnd}}</a>
+                  <a @click="filterFunc(index,price.priceStart,price.priceEnd)" v-bind:class="{'cur':checkedIndex==index}" href="javascript:void(0)">{{price.priceStart}} - {{price.priceEnd}}</a>
                 </dd>
               </dl>
             </div>
@@ -45,6 +45,9 @@
         </div>
       </div>
       <div class="md-overlay" v-show="overLayFlag" @click="overLayFlag=false"></div>
+      <div v-show="scrollLoading" style="text-align:center;height: 30px;background-color: transparent;width: 100%;margin: 0 auto;" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
+        <img src="../../static/loading-svg/loading-balls.svg">
+      </div>
       <navFooter></navFooter>
     </div>
 </template>
@@ -57,11 +60,13 @@ import NavFooter from '@/components/navFooter';
 import Bread from '@/components/Bread';
 import axios from 'axios';
 
+
 export default {
   name: 'GoodList',
   data () {
     return {
-      resData: '',
+      resData: [],
+      pgData: [],
       filterPrice: [
         {
           priceStart: 0,
@@ -73,15 +78,23 @@ export default {
         },
         {
           priceStart: 500,
-          priceEnd: 1000
+          priceEnd: 3000
         },
         {
-          priceStart: 1000,
-          priceEnd: 2000
+          priceStart: 3000,
+          priceEnd: 5000
         }
       ],
       checkedIndex: 'All',
-      overLayFlag: false
+      overLayFlag: false,
+      busy: false,
+      sort: 1,
+      pageSize: 3,
+      pageNum: 1,
+      lastPage: 10,
+      scrollLoading: false,
+      priceStart: 'All',
+      priceEnd: 'All'
     }
   },
   mounted: function(){
@@ -94,13 +107,67 @@ export default {
   },
   methods: {
     init(){
-      axios.get('/goods')
+      const param = {
+        sort: this.sort,
+        pageSize: this.pageSize,
+        pageNum: this.pageNum,
+        priceStart: this.priceStart,
+        priceEnd: this.priceEnd
+      };
+      axios.get('/goods/sort',{
+        params: param
+      })
         .then((res)=>{
           this.resData = res.data.result.list;
+          this.lastPage = res.data.result.lastPage
+        })
+    },
+    render(){
+      const param = {
+        sort: this.sort,
+        pageSize: this.pageSize,
+        pageNum: this.pageNum,
+        priceStart: this.priceStart,
+        priceEnd: this.priceEnd
+      };
+
+      axios.get('/goods/sort',{
+        params: param
+      })
+        .then((res)=>{
+          this.pgData = res.data.result.list;
+          this.resData=this.resData.concat(this.pgData);
+          this.lastPage = res.data.result.lastPage;
+          this.scrollLoading = false;
         })
     },
     showPop(){
       this.overLayFlag=true;
+    },
+    loadMore(){
+        this.busy = true;
+        setTimeout(() => {
+              if(this.pageNum<this.lastPage){
+                this.pageNum++;
+                this.scrollLoading = true;
+                this.render();
+              };
+          this.busy = false;
+        }, 1000);
+      },
+    sortFunc(){
+      this.pageNum = 1;
+      this.resData = [];
+      this.sort = (this.sort === -1)?1:-1;
+      this.render();
+    },
+    filterFunc(checkedIndex,priceStart,priceEnd){
+      this.pageNum = 1;
+      this.resData = [];
+      this.checkedIndex=checkedIndex;
+      this.priceStart = priceStart;
+      this.priceEnd = priceEnd;
+      this.render();
     }
   }
 }
