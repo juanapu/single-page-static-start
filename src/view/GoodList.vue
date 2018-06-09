@@ -34,7 +34,7 @@
                       <div class="name">{{item.productName}}</div>
                       <div class="price">{{item.prodcutPrice}}</div>
                       <div class="btn-area">
-                        <a href="javascript:;" class="btn btn--m">加入购物车</a>
+                        <a @click="addCartFunc(item)" href="javascript:;" class="btn btn--m">加入购物车</a>
                       </div>
                     </div>
                   </li>
@@ -168,6 +168,21 @@ export default {
       this.priceStart = priceStart;
       this.priceEnd = priceEnd;
       this.render();
+    },
+    addCartFunc(item){
+      console.log(" here -- ittem ");
+      console.log(item.productId);
+      axios.post('/goods/cart',{
+        productid: item.productId
+      })
+      .then(res => {
+        console.log(" --- right -- ");
+        console.log(res);
+      })
+      .catch(error =>{
+        alert(' response error');
+        console.log(error);
+      });
     }
   }
 }
