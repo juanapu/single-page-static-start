@@ -16,7 +16,7 @@
             <div class="navbar-menu-container">
               <!--<a href="/" class="navbar-link">我的账户</a>-->
               <span class="navbar-link"></span>
-              <a href="javascript:void(0)" class="navbar-link">Login</a>
+              <a href="javascript:void(0)" class="navbar-link" @click="showLogin">Login</a>
               <a href="javascript:void(0)" class="navbar-link">Logout</a>
               <div class="navbar-cart-container">
                 <span class="navbar-cart-count"></span>
@@ -29,7 +29,67 @@
             </div>
           </div>
         </div>
+        <div class="md-modal modal-msg md-modal-transition" v-bind:class="{'md-show':loginCover}">
+          <div class="md-modal-inner">
+            <div class="md-top">
+              <div class="md-title">Login in</div> 
+              <button class="md-close" @click="hideLogin">Close</button>
+            </div> 
+            <div class="md-content">
+              <div class="confirm-tips">
+                <div class="error-wrap" v-bind:class="{'error-show': errorShow}">{{errorMsg}}
+                </div>
+                 <ul>
+                  <li class="regi_form_input"><i class="icon IconPeople"></i> <input v-model="username" type="text" tabindex="1" name="loginname" placeholder="User Name" data-type="loginname" class="regi_login_input regi_login_input_left"></li> 
+                  <li class="regi_form_input noMargin"><i class="icon IconPwd"></i> <input v-model="userpwd" type="password" tabindex="2" name="password" placeholder="Password" class="regi_login_input regi_login_input_left login-input-no input_text"></li></ul>
+                </div> 
+                <div class="login-wrap"><a href="javascript:;" class="btn-login" @click="loginFetch">登  录</a></div>
+              </div>
+            </div>
+          </div>
+          <div v-show="loginCover" class="md-overlay" ></div>
       </header>
 </template>
-
+<script type="text/javascript">
+  import '../assets/css/app.css';
+  import axios from 'axios';
+  export default{
+    name: 'NavHeader',
+    data(){
+      return {
+        loginCover: false,
+        username: '',
+        userpwd: '',
+        errorShow: false,
+        errorMsg: ''
+      }
+    },
+    methods: {
+      showLogin(){
+        this.loginCover = true;
+      },
+      hideLogin(){
+        this.loginCover = false;
+      },
+      loginFetch(){
+        axios.post('/users/login',{
+          username: this.username,
+          userpwd: this.userpwd
+        })
+          .then(res=>{
+            if(res.data.status === '1'){
+               this.errorMsg = res.data.msg;
+               this.errorShow = true;
+            }else if(res.data.status === '0'){
+                this.errorShow = false;
+                this.loginCover = false;
+            }else{
+              this.errorMsg = res.data.result.msg;
+              this.errorShow = true;
+            }
+          });
+      }
+    }
+  }
+</script>
 
