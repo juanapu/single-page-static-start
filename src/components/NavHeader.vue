@@ -47,21 +47,16 @@
               </div>
             </div>
           </div>
-          <div class="public-error" v-bind:class="{'error-show': publicErrorShow}">
-            <div class="inrerror">
-                {{publicErrorMsg}}
-            </div>
-            <div class="close" @click="closePublicError">
-              <button>X</button>
-            </div>
-          </div>
+          <transition name="fade">
+            <alert v-show="publicErrorShow" v-bind:message="publicErrorMsg" v-on:publicError="publicErrorShow=$event"></alert>
+          </transition>
           <div v-show="loginCover" class="md-overlay" ></div>
       </header>
 </template>
 <script type="text/javascript">
   import '../assets/css/app.css';
-  import '../assets/css/header.css';
   import axios from 'axios';
+  import Alert from '@/components/Alert';
   export default{
     name: 'NavHeader',
     data(){
@@ -74,6 +69,9 @@
         publicErrorShow: false,
         publicErrorMsg: ''
       }
+    },
+    components: {
+      Alert
     },
     methods: {
       showLogin(){
@@ -111,10 +109,7 @@
               this.publicErrorMsg = res.data.result.msg;
             }
           })
-      },
-        closePublicError(){
-          this.publicErrorShow =  false;
-        }
+      }
     }
   }
 </script>
