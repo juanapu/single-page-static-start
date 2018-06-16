@@ -17,7 +17,7 @@
               <!--<a href="/" class="navbar-link">我的账户</a>-->
               <span class="navbar-link"></span>
               <a href="javascript:void(0)" class="navbar-link" @click="showLogin">Login</a>
-              <a href="javascript:void(0)" class="navbar-link">Logout</a>
+              <a href="javascript:void(0)" class="navbar-link" @click="logoutFunc">Logout</a>
               <div class="navbar-cart-container">
                 <span class="navbar-cart-count"></span>
                 <a class="navbar-link navbar-cart-link" href="/#/cart">
@@ -47,11 +47,20 @@
               </div>
             </div>
           </div>
+          <div class="public-error" v-bind:class="{'error-show': publicErrorShow}">
+            <div class="inrerror">
+                {{publicErrorMsg}}
+            </div>
+            <div class="close" @click="closePublicError">
+              <button>X</button>
+            </div>
+          </div>
           <div v-show="loginCover" class="md-overlay" ></div>
       </header>
 </template>
 <script type="text/javascript">
   import '../assets/css/app.css';
+  import '../assets/css/header.css';
   import axios from 'axios';
   export default{
     name: 'NavHeader',
@@ -61,7 +70,9 @@
         username: '',
         userpwd: '',
         errorShow: false,
-        errorMsg: ''
+        errorMsg: '',
+        publicErrorShow: false,
+        publicErrorMsg: ''
       }
     },
     methods: {
@@ -88,7 +99,22 @@
               this.errorShow = true;
             }
           });
-      }
+      },
+      logoutFunc(){
+        axios.post('/users/logout')
+          .then(res => {
+            if(res.data.status === '0'){
+              this.publicErrorShow = true;
+              this.publicErrorMsg =  res.data.result.msg;
+            }else{
+              this.publicErrorShow = true;
+              this.publicErrorMsg = res.data.result.msg;
+            }
+          })
+      },
+        closePublicError(){
+          this.publicErrorShow =  false;
+        }
     }
   }
 </script>

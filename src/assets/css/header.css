@@ -1,0 +1,30 @@
+.public-error {
+	position: absolute;
+    top: 100px;
+    right: 16px;
+    background: #daf1d7;
+    box-shadow: 1px 1px 3px #ccc;
+    border: 1px solid #dbefd7;
+    border-radius: 5px;
+    padding: 14px 24px;
+    color: #789074;
+    display: none;
+    transition: 20s;
+    -webkit-transition: 20s;
+}
+.public-error.error-show{
+	display: block;
+	    /*transition: all 20s linear;*/
+    /*-webkit-transition: all 20s linear;*/
+}
+
+.public-error .close{
+	font-size: 12px;
+    position: absolute;
+    top: 4px;
+    padding: 3px;
+    right: 6px;
+}
+.public-error .inrerror {
+    padding: 5px;
+}

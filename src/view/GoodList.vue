@@ -169,20 +169,41 @@ export default {
       this.priceEnd = priceEnd;
       this.render();
     },
+    getCookies(cname){
+      console.log(" --- check cname"+cname);
+      let name = cname + "=";
+      const decodeCookie = decodeURIComponent(document.cookie);
+      let ca = decodeCookie.split(';');
+      for(let i=0;i<ca.length;i++){
+        let c = ca[i];
+        while (c.charAt(0) == ' '){
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0){
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    },
     addCartFunc(item){
-      console.log(" here -- ittem ");
-      console.log(item.productId);
-      axios.post('/goods/cart',{
-        productid: item.productId
-      })
-      .then(res => {
-        console.log(" --- right -- ");
-        console.log(res);
-      })
-      .catch(error =>{
-        alert(' response error');
-        console.log(error);
-      });
+      const cookieUserId = this.getCookies('userId');
+    if(!cookieUserId){
+      alert(" please login !!!!");
+    }else{
+        axios.post('/goods/cart',{
+          productid: item.productId
+        })
+        .then(res => {
+          if(res.status === '1001'){
+            alert(" please login first");
+          }
+          console.log(res);
+        })
+        .catch(error =>{
+          alert(' response error');
+          console.log(error);
+        });
+      }
     }
   }
 }
