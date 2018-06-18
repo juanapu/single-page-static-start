@@ -48,7 +48,12 @@
       <div v-show="scrollLoading" style="text-align:center;height: 30px;background-color: transparent;width: 100%;margin: 0 auto;" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
         <img src="../../static/loading-svg/loading-balls.svg">
       </div>
-      <navFooter></navFooter>
+      <navFooter loginProps="login"></navFooter>
+      <modal v-bind:modalCover="showModal" v-on:hideModal="hideModal">
+        <div class="modal center" slot="content">{{modalText}}</div>
+        <a class="btn btn--m" href="javascript:;" slot="cancel" @click="hideModal" v-show="addCartSuccess">Continue</a>
+        <router-link slot="confirm" class="confirm btn btn--m btn--red" href="javascript:;" to="/cart" @click="goCart" v-show="addCartSuccess">Check Cart</router-link>
+      </modal>
     </div>
 </template>
 
@@ -59,6 +64,7 @@ import NavHeader from '@/components/NavHeader';
 import NavFooter from '@/components/navFooter';
 import Bread from '@/components/Bread';
 import axios from 'axios';
+import Modal from '@/components/Modal';
 
 
 export default {
@@ -94,16 +100,25 @@ export default {
       lastPage: 10,
       scrollLoading: false,
       priceStart: 'All',
-      priceEnd: 'All'
+      priceEnd: 'All',
+      login: false,
+      showModal: false,
+      modalText: '',
+      addCartSuccess: false
     }
   },
   mounted: function(){
+     const userId = this.getCookies('userId');
+    if(userId){
+        this.login = true; 
+    }
     this.init();
   },
   components: {
     NavHeader,
     NavFooter,
-    Bread
+    Bread,
+    Modal
   },
   methods: {
     init(){
@@ -170,7 +185,6 @@ export default {
       this.render();
     },
     getCookies(cname){
-      console.log(" --- check cname"+cname);
       let name = cname + "=";
       const decodeCookie = decodeURIComponent(document.cookie);
       let ca = decodeCookie.split(';');
@@ -187,23 +201,32 @@ export default {
     },
     addCartFunc(item){
       const cookieUserId = this.getCookies('userId');
+       this.showModal = true;
+       this.addCartSuccess =  false;
     if(!cookieUserId){
-      alert(" please login !!!!");
+       this.modalText = "please login";
     }else{
         axios.post('/goods/cart',{
           productid: item.productId
         })
         .then(res => {
           if(res.status === '1001'){
-            alert(" please login first");
+            this.modalText = "please login first";
+          }else{
+            this.modalText = "Added to cart";
+            this.addCartSuccess = true;
           }
-          console.log(res);
         })
         .catch(error =>{
-          alert(' response error');
-          console.log(error);
+          this.modalText = "response error";
         });
       }
+    },
+    hideModal(){
+      this.showModal = false;
+    },
+    goCart(){
+      window.location.href = "/cart";
     }
   }
 }

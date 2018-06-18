@@ -7,6 +7,15 @@
   clear: both;
 }
 
+.modal.center{
+  font-size: 20px;
+}
+.md-button{
+    padding-top: 30px;
+}
+.md-button>a {
+    margin: 0px 14px;
+}
 .accessory-list > ul > li {
   float: left;
   width: 23.80952%;

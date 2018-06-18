@@ -16,8 +16,8 @@
             <div class="navbar-menu-container">
               <!--<a href="/" class="navbar-link">我的账户</a>-->
               <span class="navbar-link"></span>
-              <a href="javascript:void(0)" class="navbar-link" @click="showLogin">Login</a>
-              <a href="javascript:void(0)" class="navbar-link" @click="logoutFunc">Logout</a>
+              <a href="javascript:void(0)" class="navbar-link" v-if="!login" @click="showLogin">Login</a>
+              <a href="javascript:void(0)" class="navbar-link" v-if="login" @click="logoutFunc">Logout</a>
               <div class="navbar-cart-container">
                 <span class="navbar-cart-count"></span>
                 <a class="navbar-link navbar-cart-link" href="/#/cart">
@@ -29,57 +29,79 @@
             </div>
           </div>
         </div>
-        <div class="md-modal modal-msg md-modal-transition" v-bind:class="{'md-show':loginCover}">
-          <div class="md-modal-inner">
-            <div class="md-top">
-              <div class="md-title">Login in</div> 
-              <button class="md-close" @click="hideLogin">Close</button>
-            </div> 
-            <div class="md-content">
-              <div class="confirm-tips">
-                <div class="error-wrap" v-bind:class="{'error-show': errorShow}">{{errorMsg}}
-                </div>
-                 <ul>
-                  <li class="regi_form_input"><i class="icon IconPeople"></i> <input v-model="username" type="text" tabindex="1" name="loginname" placeholder="User Name" data-type="loginname" class="regi_login_input regi_login_input_left"></li> 
-                  <li class="regi_form_input noMargin"><i class="icon IconPwd"></i> <input v-model="userpwd" type="password" tabindex="2" name="password" placeholder="Password" class="regi_login_input regi_login_input_left login-input-no input_text"></li></ul>
+          <modal v-bind:modalCover="loginCover" v-on:hideModal="hidelogin" errorshow="errorShow" >
+            <template slot="title">Login</template>
+            <template slot="content">
+              <div class="md-content">
+                <div class="confirm-tips">
+                  <div class="error-wrap" v-bind:class="{'error-show': errorShow}">{{errorMsg}}
+                  </div>
+                   <ul>
+                    <li class="regi_form_input"><i class="icon IconPeople"></i> <input v-model="username" type="text" tabindex="1" name="loginname" placeholder="User Name" data-type="loginname" class="regi_login_input regi_login_input_left"></li> 
+                    <li class="regi_form_input noMargin"><i class="icon IconPwd"></i> <input v-model="userpwd" type="password" tabindex="2" name="password" placeholder="Password" class="regi_login_input regi_login_input_left login-input-no input_text"></li></ul>
                 </div> 
                 <div class="login-wrap"><a href="javascript:;" class="btn-login" @click="loginFetch">登  录</a></div>
               </div>
-            </div>
-          </div>
+            </template>
+          </modal>
           <transition name="fade">
             <alert v-show="publicErrorShow" v-bind:message="publicErrorMsg" v-on:publicError="publicErrorShow=$event"></alert>
           </transition>
-          <div v-show="loginCover" class="md-overlay" ></div>
       </header>
 </template>
 <script type="text/javascript">
   import '../assets/css/app.css';
   import axios from 'axios';
   import Alert from '@/components/Alert';
+  import Modal from '@/components/Modal';
+
   export default{
     name: 'NavHeader',
+    props: ["loginProps"],
     data(){
       return {
-        loginCover: false,
         username: '',
         userpwd: '',
         errorShow: false,
         errorMsg: '',
         publicErrorShow: false,
-        publicErrorMsg: ''
+        publicErrorMsg: '',
+        login: this.loginProps,
+        loginCover: false
+      }
+    },
+    mounted(){
+      const userId = this.getCookies('userId');
+      if(userId){
+        this.login = true; 
       }
     },
     components: {
-      Alert
+      Alert,
+      Modal
     },
     methods: {
+      hidelogin($event){
+        this.loginCover = false;
+      },
       showLogin(){
         this.loginCover = true;
       },
-      hideLogin(){
-        this.loginCover = false;
-      },
+      getCookies(cname){
+        let name = cname + "=";
+        const decodeCookie = decodeURIComponent(document.cookie);
+        let ca = decodeCookie.split(';');
+        for(let i=0;i<ca.length;i++){
+          let c = ca[i];
+          while (c.charAt(0) == ' '){
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0){
+            return c.substring(name.length, c.length);
+          }
+        }
+        return "";
+    },
       loginFetch(){
         axios.post('/users/login',{
           username: this.username,
@@ -92,6 +114,7 @@
             }else if(res.data.status === '0'){
                 this.errorShow = false;
                 this.loginCover = false;
+                this.login = true;
             }else{
               this.errorMsg = res.data.result.msg;
               this.errorShow = true;
@@ -104,6 +127,7 @@
             if(res.data.status === '0'){
               this.publicErrorShow = true;
               this.publicErrorMsg =  res.data.result.msg;
+              this.login = false;
             }else{
               this.publicErrorShow = true;
               this.publicErrorMsg = res.data.result.msg;

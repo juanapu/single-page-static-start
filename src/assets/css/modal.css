@@ -1,0 +1,19 @@
+.center{
+	text-align: center;
+}
+.md-button{
+	text-align: center;
+}
+.md-button>button{
+    display: inline-block;
+    height: 38px;
+    line-height: 38px;
+    border: 2px solid #009de6;
+    background: #009de6;
+    color: #fff;
+    font-size: 18px;
+    text-align: center;
+    padding: 0px 42px;
+    border-radius: 5px;
+    margin: 24px 20px;
+}
