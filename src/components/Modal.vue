@@ -20,7 +20,6 @@
 </template>
 
 <script type="text/javascript">
-  import '../assets/css/app.css';
   import '../assets/css/modal.css';
   export default{
   	name: 'Modal',

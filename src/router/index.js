@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import GoodList from '@/view/GoodList'
-import Cart from '@/view/Cart'
+import HomePg from '@/view/HomePg'
 
 Vue.use(Router)
 
@@ -10,12 +9,7 @@ export default new Router({
     {
       path: '/',
       name: 'Index',
-      component: GoodList
-    },
-    {
-    	path: '/cart',
-    	name: 'Cart',
-    	component: Cart
+      component: HomePg
     }
   ]
 })

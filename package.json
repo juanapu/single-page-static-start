@@ -1,7 +1,7 @@
 {
-  "name": "mall",
+  "name": "clean",
   "version": "1.0.0",
-  "description": "mall project",
+  "description": "clean project",
   "author": "juana",
   "private": true,
   "scripts": {
