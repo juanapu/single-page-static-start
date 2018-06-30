@@ -12,7 +12,7 @@
                 </h2>
                   <form class="form-horizontal">
                     <div class="form-group">
-                      <label class="control-label col-sm-2" for="email">Selected Package:</label><div class="col-sm-10">
+                      <label class="control-label col-sm-2" for="package">Selected Package:</label><div class="col-sm-10">
                           <select class="form-control" id="package" name="package" v-bind:value="orderPackage">
                             <option>package1</option>
                             <option>package2</option>
@@ -22,8 +22,10 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label col-sm-2" for="startTime">Visit time:</label><div class="col-sm-10">
-                          <select class="form-control" id="startTime" name="startTime" v-bind:value="startTime">
+                          <select id="hourpk" name="hourpk" v-bind:value="startTime">
+                            <option v-for="item in resAvbTime">{{item.startTime.slice(0,2)+":"+item.startTime.slice(2,4)}} - {{item.endTime.slice(0,2)+":"+item.startTime.slice(2,4)}}</option>
                           </select>
+                           <datepicker @selected="selecTimeFuc" v-bind:disabledDates="disabledDates" v-bind:value="date"></datepicker>
                         </div>
                     </div>
                     <div class="form-group">
@@ -36,8 +38,11 @@
                         <input type="password" class="form-control" id="userPwd" placeholder="Enter password" name="userPwd">
                       </div>
                     </div>
-                    <div class="form-group">        
+                    <div class="form-group">     
                       <div class="col-sm-offset-2 col-sm-10">
+                        <div class="checkbox">
+                          <label><input type="checkbox" name="allowKid"> Allow to bring kids</label>
+                        </div>
                         <div class="checkbox">
                           <label><input type="checkbox" name="remember"> Remember me</label>
                         </div>
@@ -59,6 +64,7 @@
 
 <script>
   import axios from 'axios';
+  import Datepicker from 'vuejs-datepicker';
 
   export default{
     name: 'OrderTable',
@@ -72,16 +78,48 @@
         packag:'',
         allowKid: true,
         comments: '',
-        remember: ''
+        remember: '',
+        disabledDates: {
+            to: new Date()
+        },
+        date: new Date(),
+        resAvbTime: ''
       }
     },
     mounted(){
-        const timeNn = new Date();
-        const dateNn = timeNn.getDate();
-        console.log(dateNn);
-
+        const _this = this;
+        const formateDate = _this.calcDate(_this.date);
+        const param = {
+          querydate: formateDate
+        };
+        _this._getTimes(param);
+    },
+    components: {
+      Datepicker
     },
     methods: {
+      selecTimeFuc(val){
+        const _this = this;
+        const formateDate = _this.calcDate(val);
+         const param = {
+          querydate: formateDate
+        };
+        _this._getTimes(param);
+      },
+      calcDate(dateInput){
+         let formateDate = '';
+         formateDate = dateInput.getFullYear().toString() + '0'+(dateInput.getMonth()+1).toString() + dateInput.getDate().toString() ;
+        return formateDate;
+      },
+      _getTimes(param){
+        const _this = this;
+        axios.get('/times/',{
+          params: param
+        })
+        .then((res)=>{
+          _this.resAvbTime = res.data.result.data;
+        }); 
+      }
 
     }
   }
