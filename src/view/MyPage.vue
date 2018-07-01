@@ -99,13 +99,15 @@
 				const _this = this;
 		        axios.get('/users/info')
 		        .then((res)=>{
-		        	if(res.data.result.data){
-			        	_this.userData = res.data.result.data;
-			            console.log("---userData--");
-			            console.log(_this.userData);
+		        	if(res.data.status === '1001'){
+		        		window.location.href = '/';
 		        	}else{
-		        		_this.showPubErr('something wrong here,please login and try again');
-		        	}
+			        	if(res.data.result.data){
+				        	_this.userData = res.data.result.data;
+			        	}else{
+			        		_this.showPubErr('something wrong here,please login and try again');
+			        	}
+			        }
 		        })
 			},
 	      changePubError(val){

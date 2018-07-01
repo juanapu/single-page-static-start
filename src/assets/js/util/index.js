@@ -22,17 +22,6 @@
 			return /^[a-zA-Z0-9_-]{4,16}$/.test(value); 
 		};
 	},
-	 getImgUrl(pet,type) {
-	 	console.log("--type--"+type);
-	 	if(type!=='absol'){
-		    var images = require.context('../../../assets/', false, /\.png$/);
-			    return images('./' + pet + ".png")
-	 	}else{
-	 		var images = require.context(pet);
-			return images();
-		}
-
-	  },
    setCookie: function(cname, cvalue, exdays){
 	   	var d = new Date();
 	    d.setTime(d.getTime() + (exdays*24*60*60*1000));
