@@ -19,3 +19,28 @@ npm run build --report
 ```
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+
+# tools
+vue-icon 
+https://www.npmjs.com/package/vue-icon
+
+
+
+## remain work
+
+encrypt --both front and back
+notification, alert
+mobile menu
+
+login: user profile show in hover
+large-screen
+hover:  logout, mypage
+
+** modallog --> logout, mypage 
+
+small-screen
+user profile hide
+logout,mypage show in menu. 
+
+** menulog:  logout, mypage

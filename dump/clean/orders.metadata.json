@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"clean.orders"},{"v":2,"key":{"userId":1},"name":"userId_1","ns":"clean.orders","background":true}],"uuid":"23a29e167d1846b9a0b005cd0afef5b5"}

@@ -2,7 +2,10 @@
 	<div class="home">
 		    <!-- Navigation -->
     <nav-header></nav-header>
-    <com-title></com-title>
+    <com-title>
+    	<span slot="smtitle">Welcome to Cleveland Cleaner</span>
+    	<span slot="pgtitle">Living Better</span>
+    </com-title>
     <section class="page-section clearfix">
       <div class="container">
       	<com-imgintro>
@@ -48,7 +51,7 @@
     <section class="page-section about-heading" id="section-table">
     	<transition name="slide-fade">
     		<div v-show="showTable">
-		    	<order-table v-bind:orderPackage="orderPackage"></order-table>
+		    	<order-table v-bind:orderPackage="orderPackage" v-on:chgSelectPkg="chgSelectPkg"></order-table>
 		    </div>
 	    </transition>
 	</section>
@@ -104,6 +107,10 @@
 				const _this = this;
 				_this.showTable=true;
 				_this.orderPackage = pack;
+			},
+			chgSelectPkg(val){
+				const _this = this;
+				_this.orderPackage = val;
 			}
 		}
 	}

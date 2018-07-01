@@ -5,13 +5,16 @@ import App from './App'
 import router from './router'
 import VueLazyload from 'vue-lazyload'
 import infiniteScroll from 'vue-infinite-scroll'
-
+import feather from 'vue-icon'
 
 Vue.config.productionTip = false
 
 Vue.use(VueLazyload,{
 	loading: '../static/loading-svg/loading-spin.svg'
 })
+
+Vue.use(feather, 'v-icon')
+
 
 Vue.use(infiniteScroll)
 

@@ -1,9 +1,9 @@
 <template>
-	  <div class="public-error" v-show="inrPublicErrorShow">
+	  <div class="public-error" v-show="publicError">
 	    <div class="inrerror">
 	    	{{message}}
 	    </div>
-	    <div class="close" v-on:click="$emit('publicError',false)">
+	    <div class="close" v-on:click="$emit('changePubError',false)">
 	      <button>X</button>
 	    </div>
 	  </div>
@@ -12,13 +12,14 @@
 <script type="text/javascript">
   import '../assets/css/publicerror.css';
   export default{
-  	name: "PubliError",
+  	name: "PubAlert",
   	props: [
-  		'message'
+  		'message',
+      'publicError'
   	],
   	data(){
   		return{
-		        inrPublicErrorShow: false
+		        inrPublicErrorShow: true
 		        // inrPublicErrorMsg: 'test test'
   			}
   	},

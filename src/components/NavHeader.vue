@@ -2,11 +2,11 @@
   <div class="header">
         <nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
           <div class="container">
-            <a class="navbar-brand text-uppercase text-expanded font-weight-bold d-lg-none" href="#">Start Bootstrap</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand text-uppercase text-expanded font-weight-bold d-lg-none" href="#">Cleveland Cleaner</a>
+            <button @click="bannerShow=!bannerShow" class="navbar-toggler" type="button">
               <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
+            <div class="collapse navbar-collapse" v-bind:class="{'show':bannerShow}" id="navbarResponsive">
               <ul class="navbar-nav mx-auto">
                 <li class="nav-item active px-lg-4">
                   <a class="nav-link text-uppercase text-expanded" href="index.html">Home
@@ -26,6 +26,7 @@
             </div>
           </div>
         </nav>
+        <user-prof></user-prof>
   </div>
 </template>
 <script type="text/javascript">
@@ -35,12 +36,14 @@
   import axios from 'axios';
   import Alert from '@/components/Alert';
   import Modal from '@/components/Modal';
+  import UserProf from '@/components/inrcomponents/UserProf';
 
   export default{
     name: 'NavHeader',
     props: ["loginProps"],
     data(){
       return {
+        bannerShow: false,
         username: '',
         userpwd: '',
         errorShow: false,
@@ -59,7 +62,8 @@
     },
     components: {
       Alert,
-      Modal
+      Modal,
+      UserProf
     },
     methods: {
       hidelogin($event){
