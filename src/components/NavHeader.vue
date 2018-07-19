@@ -26,21 +26,44 @@
             </div>
           </div>
         </nav>
-        <user-prof></user-prof>
+        <user-prof v-if="login" v-bind:showUserPopProps="showUserPop" v-on:showUserPop="showUserPopFuc"></user-prof>
+        <transition name="fade">
+          <user-pop class="show-user-pop" v-show="showUserPop" v-on:logoutFunc="logoutFunc"></user-pop>
+        </transition>
+        <login-com v-if="!login" v-on:showLogin="showLogin">Check My Orders</login-com>
+        <Modal v-bind:modalCover="modalCover" v-on:hideModal="hideModal" v-on:confirmFuc="confirmFuc">
+          <div slot="title">Please Login</div>
+          <div slot="content">
+            <form>
+              <input type="text" name="username" v-model="username" @change="errorShow=false">
+              <input type="password" name="userpwd" v-model="userpwd" @change="errorShow=false">
+            </form>
+            <div v-show="errorShow">{{this.errorMsg}}</div>
+          </div>
+          <div slot="cancle">close</div>
+          <div slot="confirm">confirm</div>
+        </Modal>
   </div>
 </template>
 <script type="text/javascript">
   import '../assets/css/bootstrap/bootstrap.min.css';
   import '../assets/css/product/style.css';
-  
+  import '../assets/css/nav.css';
+  import router from '../router'
+
+
+  import _util from '@/assets/js/util/index';
+  import base64 from 'base-64';
   import axios from 'axios';
   import Alert from '@/components/Alert';
+  import PubAlert from '@/components/Alert';
   import Modal from '@/components/Modal';
   import UserProf from '@/components/inrcomponents/UserProf';
+  import LoginCom from '@/components/inrcomponents/LoginCom';
+  import UserPop from '@/components/inrcomponents/UserPop';
 
   export default{
     name: 'NavHeader',
-    props: ["loginProps"],
     data(){
       return {
         bannerShow: false,
@@ -48,14 +71,16 @@
         userpwd: '',
         errorShow: false,
         errorMsg: '',
-        publicErrorShow: false,
-        publicErrorMsg: '',
-        login: this.loginProps,
-        loginCover: false
+        publicError: false,
+        pubMes: '',
+        login: false,
+        loginCover: false,
+        modalCover: false,
+        showUserPop: false //logout + my page popup
       }
     },
     mounted(){
-      const userId = this.getCookies('userId');
+      const userId = this.getCookies('_id');
       if(userId){
         this.login = true; 
       }
@@ -63,7 +88,9 @@
     components: {
       Alert,
       Modal,
-      UserProf
+      UserProf,
+      UserPop,
+      LoginCom
     },
     methods: {
       hidelogin($event){
@@ -71,6 +98,17 @@
       },
       showLogin(){
         this.loginCover = true;
+        this.modalCover = true;
+      },
+      hideModal(){
+        this.modalCover = false;
+      },
+      //clicked login confirm function
+      confirmFuc(confirm){
+        const _this = this;
+        if(confirm){
+          _this.loginFetch();  
+        }
       },
       getCookies(cname){
         let name = cname + "=";
@@ -87,37 +125,58 @@
         }
         return "";
     },
+    checkLogin(){
+      const _this = this;
+        if(!_this.login){
+          _this.loginCover = true;
+          _this.modalCover = true;
+        }
+      },
       loginFetch(){
-        axios.post('/users/login',{
-          username: this.username,
-          userpwd: this.userpwd
+        const _this = this;
+        axios.post('/users/loginbyuser',{
+          username: _this.username,
+          userpwd: base64.encode(_this.userpwd)
         })
           .then(res=>{
             if(res.data.status === '1'){
-               this.errorMsg = res.data.msg;
-               this.errorShow = true;
+               _this.errorMsg = res.data.msg;
+               _this.errorShow = true;
             }else if(res.data.status === '0'){
-                this.errorShow = false;
-                this.loginCover = false;
-                this.login = true;
+                _this.errorShow = false;
+                _this.loginCover = false;
+                _this.modalCover= false;
+                _this.login = true;
+                _util.setCookie('_id',res.data.result.data._id,0.05);
+                _this.showPubErr("congrates, your've login");
+                router.push('/mypage');                
             }else{
-              this.errorMsg = res.data.result.msg;
-              this.errorShow = true;
+              _this.errorMsg = res.data.result.msg;
+              _this.errorShow = true;
             }
           });
       },
       logoutFunc(){
+        this.showUserPop=false;
         axios.post('/users/logout')
           .then(res => {
             if(res.data.status === '0'){
-              this.publicErrorShow = true;
-              this.publicErrorMsg =  res.data.result.msg;
+              this.publicError = true;
+              this.pubMes =  res.data.result.msg;
               this.login = false;
             }else{
-              this.publicErrorShow = true;
-              this.publicErrorMsg = res.data.result.msg;
+              this.publicError = true;
+              this.pubMes = res.data.result.msg;
             }
           })
+      },
+      showPubErr(msg){
+        const _this = this;
+          _this.pubMes = msg;
+          _this.publicError = true;
+      },
+      showUserPopFuc(val){
+        this.showUserPop=val;
       }
     }
   }

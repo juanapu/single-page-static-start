@@ -1,22 +1,25 @@
 <template>
-	<div class="modal">
-		 <div class="md-modal modal-msg md-modal-transition" v-bind:class="{'md-show':modalCover}">
-	          <div class="md-modal-inner">
-		            <div class="md-top">
-		              <div class="md-title">
-		              	<slot name="title"></slot>
-		              </div> 
-		              <button class="md-close" v-on:click="hideModal">Close</button>
-		            </div> 
-		            <slot name="content"></slot>
-               <div class="md-button">
-                       <slot name="cancel"></slot>
-                       <slot name="confirm"></slot>
-                </div>
-	           </div>
+  <!-- Modal -->
+  <div id="myModal" class="modal" role="dialog" v-bind:class="{'fade': !modalCover}">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <slot name="title"></slot>
+          <button type="button" class="close" data-dismiss="modal" v-on:click="hideModal">&times;</button>
         </div>
-        <div v-show="modalCover" class="md-overlay" ></div>
-	</div>
+        <div class="modal-body">
+          <slot name="content"></slot>
+        </div>
+        <div class="modal-footer">
+           <button type="button" class="btn btn-default" data-dismiss="modal" v-on:click="confirmFuc"><slot name="confirm"></slot></button>
+          <button type="button" class="btn btn-default" data-dismiss="modal" v-on:click="hideModal"><slot name="cancle"></slot></button>
+        </div>
+      </div>
+
+    </div>
+  </div>
 </template>
 
 <script type="text/javascript">
@@ -36,7 +39,10 @@
   	methods: {
   		hideModal(){
   			this.$emit('hideModal',true);
-  		}
+  		},
+      confirmFuc(){
+        this.$emit('confirmFuc',true);
+      }
   	}
 
   }

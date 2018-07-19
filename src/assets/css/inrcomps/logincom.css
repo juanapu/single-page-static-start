@@ -1,0 +1,8 @@
+.login-wrap button.btn.btn-primary {
+    position: absolute;
+    display: inline-block;
+    vertical-align: middle;
+}
+.login-wrap{
+	position: absolute;
+}

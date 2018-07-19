@@ -1,0 +1,29 @@
+
+.show-user-pop ul{
+	border-radius: 5px;
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+    overflow: hidden;
+    list-style-type: none;
+}
+
+.show-user-pop ul>li{
+	list-style-type: none;
+	padding: 1em 2em;
+}
+.show-user-pop ul>li>a,.show-user-pop ul>li>a:hover{
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.show-user-pop ul>li:nth-child(2n+1){
+	background-color: #ba8541;
+	color: #ffffff;
+}
+
+.show-user-pop ul>li:hover{
+	background-color: #f5d2a5;
+	color: #ffffff;
+	cursor: pointer;
+}

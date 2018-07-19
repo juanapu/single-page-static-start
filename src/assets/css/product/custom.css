@@ -18,7 +18,7 @@
 	display: inline-block;
 }
 
-.user-wrap {
+.user-wrap,.login-wrap {
     position: absolute;
     top: 0px;
     right: 0px;
@@ -27,6 +27,9 @@
     line-height: 86px;
     text-align: center;
     padding-top: 23px;
+}
+.login-wrap{
+  right: 130px;
 }
 .profileWrap li{
   list-style: none;

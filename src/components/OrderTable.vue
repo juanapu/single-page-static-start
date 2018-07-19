@@ -211,9 +211,6 @@
           params: param
         })
         .then((res)=>{
-          console.log("--- res ---");
-          console.log(res);
-
           const data = res.data.result?res.data.result.data:'';
           const result = [];
           for(let i=0;i<data.length;i++){

@@ -1,5 +1,5 @@
 <template>
-	<div class="user-wrap">
+	<div class="user-wrap" @click="showUserPop">
 		<div class="icon-wrap">
 			<v-icon name="user"></v-icon>
 		</div>
@@ -10,6 +10,7 @@
 	import '@/assets/css/inrcomps/user.css';
 
 	export default{
+		props: ['showUserPopProps'],
 		name: 'UserProf',
 		components: {
 		},
@@ -19,6 +20,10 @@
 			}
 		},
 		methods: {
+			showUserPop(){
+				console.log(this.showUserPopProps);
+				this.$emit('showUserPop',!this.showUserPopProps);
+			}
 
 		}
 	};
