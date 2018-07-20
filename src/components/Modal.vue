@@ -13,7 +13,7 @@
           <slot name="content"></slot>
         </div>
         <div class="modal-footer">
-           <button type="button" class="btn btn-default" data-dismiss="modal" v-on:click="confirmFuc"><slot name="confirm"></slot></button>
+           <button type="button" class="btn btn-default confirm" data-dismiss="modal" v-on:click="confirmFuc"><slot name="confirm"></slot></button>
           <button type="button" class="btn btn-default" data-dismiss="modal" v-on:click="hideModal"><slot name="cancle"></slot></button>
         </div>
       </div>

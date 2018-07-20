@@ -12,6 +12,9 @@
         <p class="mb-3">
             <slot name="desc"></slot>
         </p>
+        <div class="mb-3">
+          <slot name="table"></slot>
+        </div>
         <div class="intro-button mx-auto">
           <slot name="link"></slot>
         </div>

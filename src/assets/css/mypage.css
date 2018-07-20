@@ -1,0 +1,18 @@
+.my-page .table span.icon>svg{
+	width: 20px;
+}
+.my-page .table{
+	text-align: left;
+	background-color: #ffffff;
+	padding: 0em;
+	border-radius: 5px;
+	margin: 2em auto;
+}
+
+.my-page .table .thead{
+	background-color: #c59e69;
+	padding: 1em;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	color: #ffffff;
+}

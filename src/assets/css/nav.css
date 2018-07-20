@@ -16,3 +16,30 @@
     z-index: 10;
     top: 56px;
 }
+.header form.loginform {
+    padding: 10px;
+    max-width: 400px;
+    margin: auto;
+}
+.header form.loginform input{
+	width: 100%;
+	padding: 6px;
+	margin: 10px 0px;
+}
+
+.header .mobileshow{
+	display: none;
+}
+
+/*mobile version*/
+@media only screen and (max-width: 767px){
+	.header .user-wrap{
+		display: none;
+	}
+	.header .mobileshow{
+		display: block;
+	}
+	.header .login-wrap{
+		display: none;
+	}
+}

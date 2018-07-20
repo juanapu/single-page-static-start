@@ -17,3 +17,29 @@ div#myModal .modal-dialog .modal-content{
 	width: 500px;
 	margin: auto;
 }
+div#myModal .modal-footer>button.confirm{
+	background-color: #e2983c;
+	color: #ffffff;
+}
+div#myModal .modal-footer>button.confirm:hover{
+	background-color: #ffd5a1;
+	color: #ffffff;
+}
+div#myModal .modal-body .errormsg{
+    font-weight: 200!important;
+    text-align: left;
+    font-size: .9em;
+    color: #bf5656;
+    padding-left: 40px;
+    position: absolute;
+    bottom: 20px;
+}
+
+
+@media only screen and (max-width: 767px) {
+	div#myModal .modal-dialog .modal-content{
+		width: 100%;
+		margin: auto;
+		overflow: hidden;
+	}
+}

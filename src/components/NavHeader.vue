@@ -16,11 +16,16 @@
                 <li class="nav-item px-lg-4">
                   <a class="nav-link text-uppercase text-expanded" href="about.html">About</a>
                 </li>
-                <li class="nav-item px-lg-4">
-                  <a class="nav-link text-uppercase text-expanded" href="products.html">Products</a>
+                <li v-if="login" class="nav-item px-lg-4 mobileshow">
+                    <router-link to="/mypage">                  
+                      <a class="nav-link text-uppercase text-expanded" href="products.html">My Page</a>
+                    </router-link>
                 </li>
-                <li class="nav-item px-lg-4">
-                  <a class="nav-link text-uppercase text-expanded" href="store.html">Store</a>
+                <li v-if="login" class="nav-item px-lg-4 mobileshow">
+                  <a class="nav-link text-uppercase text-expanded" href="script:void(0)" @click="logoutFunc">Logout</a>
+                </li>
+                <li v-if="!login" class="nav-item px-lg-4 mobileshow">
+                  <a class="nav-link text-uppercase text-expanded" href="script:void(0)" @click="showLogin">Login</a>
                 </li>
               </ul>
             </div>
@@ -34,11 +39,13 @@
         <Modal v-bind:modalCover="modalCover" v-on:hideModal="hideModal" v-on:confirmFuc="confirmFuc">
           <div slot="title">Please Login</div>
           <div slot="content">
-            <form>
-              <input type="text" name="username" v-model="username" @change="errorShow=false">
-              <input type="password" name="userpwd" v-model="userpwd" @change="errorShow=false">
+            <form class="loginform">
+                  User Name:<br>
+                  <input type="text" name="username" v-model="username" @change="errorShow=false"><br>
+                  Pass Word<br>
+                  <input type="password" name="userpwd" v-model="userpwd" @change="errorShow=false">
             </form>
-            <div v-show="errorShow">{{this.errorMsg}}</div>
+            <div class="errormsg" v-show="errorShow">{{this.errorMsg}}</div>
           </div>
           <div slot="cancle">close</div>
           <div slot="confirm">confirm</div>
@@ -140,8 +147,9 @@
         })
           .then(res=>{
             if(res.data.status === '1'){
-               _this.errorMsg = res.data.msg;
+               _this.errorMsg = res.data.result.msg;
                _this.errorShow = true;
+
             }else if(res.data.status === '0'){
                 _this.errorShow = false;
                 _this.loginCover = false;
