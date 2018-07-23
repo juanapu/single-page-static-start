@@ -1,21 +1,15 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HomePg from '@/view/HomePg'
-import MyPage from '@/view/MyPage'
+import Home from '@/view/Home/Home'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
-      {
-      path: '/mypage',
-      name: 'MyPage',
-      component: MyPage
-    },
     {
-      path: '/',
-      name: 'HomePg',
-      component: HomePg
+    	path: '/',
+    	name: 'Home',
+    	component: Home
     }
   ]
 })
