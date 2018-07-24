@@ -27,20 +27,4 @@ https://www.npmjs.com/package/vue-icon
 
 
 
-## remain work
 
-encrypt --both front and back
-notification, alert
-mobile menu
-
-login: user profile show in hover
-large-screen
-hover:  logout, mypage
-
-** modallog --> logout, mypage 
-
-iniate-screen
-user profile hide
-logout,mypage show in menu. 
-
-** menulog:  logout, mypage
