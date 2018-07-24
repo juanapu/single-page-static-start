@@ -78,7 +78,7 @@
 		      	const cookie = document.cookie;
 		      	const ind = cookie.indexOf('_id=')+4;
 		      	const lastletter = cookie.indexOf(';',ind);
-		      	const result = cookie.substring(ind,lastletter);
+		      	const result = (lastletter === -1)?cookie.substring(ind):cookie.substring(ind,lastletter);
 		      	return result
 		      },
 		      logoutFunc(){
