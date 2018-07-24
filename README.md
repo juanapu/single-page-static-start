@@ -1,6 +1,6 @@
-# mall
+#iniate
 
-> mall project
+>iniate project
 
 ## Build Setup
 
@@ -39,7 +39,7 @@ hover:  logout, mypage
 
 ** modallog --> logout, mypage 
 
-small-screen
+iniate-screen
 user profile hide
 logout,mypage show in menu. 
 
